@@ -11,8 +11,8 @@ using namespace std;
 int main (int argc, char **argv)
 {
 	TSwitch sw;
-	string alphabet;
-	unsigned int sigma;
+	string alphabet = DNA;
+	unsigned int sigma = alphabet.size();
 	int mod;
 	string pattern_file;
 	string text_file;
@@ -26,6 +26,7 @@ int main (int argc, char **argv)
 	vector < unsigned int > Occ;
 	unsigned int column;
 	unsigned int row;
+	ofstream result;
 
 	clock_t start, finish;
 
@@ -42,17 +43,6 @@ int main (int argc, char **argv)
 	}
 	else
 	{
-		if ( sw.alphabet.compare ( "DNA" ) == 0 )
-		{
-			alphabet = DNA;
-			sigma = alphabet.size();
-		}
-		else
-		{
-			cout << "Error: Only support DNA alphabet up to now!" << endl;
-			return 0;
-		}
-
 		if ( sw.mod != 1 && sw.mod != 2 )
 		{
 			cout << "Erroe: Mode(-m) incorrect!" << endl;
@@ -185,18 +175,28 @@ int main (int argc, char **argv)
 	finish = clock();
 
 	cout << "Number of Occurrences: " << num_Occ << endl;
-#if 1 
-	for ( unsigned int i = 0; i < num_Occ; i++ )
-		cout << "Pattern occurs at position " << Occ[i] << endl;
+#if 1
+	result.open ( output );
+	if ( num_Occ == 0 )
+	{
+		result << "No Occurrences is found.\n";
+	}
+	else
+	{
+		result << "Position of Occurrences:\n";
+		for ( unsigned int i = 0; i < num_Occ; i++ )
+			result << Occ[i] << '\n';
+	}
 #endif
 	double passtime = ( ( double ) finish - start ) / CLOCKS_PER_SEC;
 
 	cout << "time: " << passtime << "s" << endl;
-	
-	ofstream result;
+
+#if 0	
 	result.open	( "esm.dat", ios::app );
 	result << m << "\t" << passtime << endl;
 	result.close();
+#endif
 
 	delete[] x;
 	if ( mod == 1 )
